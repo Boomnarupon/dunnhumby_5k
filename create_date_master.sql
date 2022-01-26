@@ -68,21 +68,23 @@ FROM (
 	FROM (
 		SELECT
 			shop_date,
-			CAST(STRFTIME('%Y', shop_date) AS INT) AS shop_year,
-			DATE(STRFTIME('%Y-%m-01', shop_date)) AS shop_monthid,
-			CAST(STRFTIME('%m', shop_date) AS INT) AS shop_month,
+			CAST(STRFTIME('%Y', date) AS INT) AS shop_year,
+			DATE(STRFTIME('%Y-%m-01', date)) AS shop_monthid,
+			CAST(STRFTIME('%m', date) AS INT) AS shop_month,
 			shop_week AS shop_weekid,
 			shop_week % 100 AS shop_week,
-			CAST(STRFTIME('%w', shop_date) AS INT) AS shop_weekday,
-			CAST(STRFTIME('%d', shop_date) AS INT) AS shop_day
+			CAST(STRFTIME('%w', date) AS INT) AS shop_weekday,
+			CAST(STRFTIME('%d', date) AS INT) AS shop_day
 		FROM (
 			SELECT
 				shop_week,
-				DATE(SUBSTR(shop_date, 1, 4) || '-' || SUBSTR(shop_date, 5, 2) || '-' || SUBSTR(shop_date, 7, 2)) AS shop_date
+				shop_date,
+				DATE(SUBSTR(date, 1, 4) || '-' || SUBSTR(date, 5, 2) || '-' || SUBSTR(date, 7, 2)) AS date
 			FROM (
 				SELECT DISTINCT
 					CAST(SHOP_WEEK AS INT) AS shop_week,
-					CAST(SHOP_DATE AS STRING) AS shop_date 
+					shop_date,
+					CAST(SHOP_DATE AS STRING) AS date 
 				FROM Supermarket
 			)
 		)
